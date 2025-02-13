@@ -43,7 +43,7 @@ export default function EditInterview() {
 
   return (
     <Container maxWidth="md">
-      <InterviewForm initialData={interview} isEdit />
+      <InterviewForm initialData={interview || undefined} isEdit />
     </Container>
   );
 } 

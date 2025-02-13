@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import {
   Paper,
   TextField,
@@ -9,6 +9,8 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  SelectChangeEvent,
+  TextFieldProps,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { interviewService } from '../services/interviewService';
@@ -41,7 +43,7 @@ export default function InterviewForm({ initialData, isEdit }: InterviewFormProp
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (isEdit) {
+      if (isEdit && initialData?._id) {
         await interviewService.update(initialData._id, formData);
       } else {
         await interviewService.create(formData);
@@ -52,12 +54,14 @@ export default function InterviewForm({ initialData, isEdit }: InterviewFormProp
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name!]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (e: SelectChangeEvent) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -71,7 +75,7 @@ export default function InterviewForm({ initialData, isEdit }: InterviewFormProp
           label="Candidate Name"
           name="candidateName"
           value={formData.candidateName}
-          onChange={handleChange}
+          onChange={handleTextChange}
           margin="normal"
           required
         />
@@ -81,7 +85,7 @@ export default function InterviewForm({ initialData, isEdit }: InterviewFormProp
           name="interviewDate"
           type="date"
           value={formData.interviewDate}
-          onChange={handleChange}
+          onChange={handleTextChange}
           margin="normal"
           required
           InputLabelProps={{ shrink: true }}
@@ -92,7 +96,7 @@ export default function InterviewForm({ initialData, isEdit }: InterviewFormProp
           name="interviewTime"
           type="time"
           value={formData.interviewTime}
-          onChange={handleChange}
+          onChange={handleTextChange}
           margin="normal"
           required
           InputLabelProps={{ shrink: true }}
@@ -102,7 +106,7 @@ export default function InterviewForm({ initialData, isEdit }: InterviewFormProp
           <Select
             name="status"
             value={formData.status}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Status"
           >
             <MenuItem value="scheduled">Scheduled</MenuItem>
@@ -115,7 +119,7 @@ export default function InterviewForm({ initialData, isEdit }: InterviewFormProp
           label="Notes"
           name="notes"
           value={formData.notes}
-          onChange={handleChange}
+          onChange={handleTextChange}
           margin="normal"
           multiline
           rows={4}

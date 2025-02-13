@@ -1,0 +1,25 @@
+# dependencies
+/node_modules
+
+# build
+/dist
+/build
+
+# environment variables
+.env
+.env.local
+.env.*.local
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea
+.vscode
+
+# misc
+.DS_Store
+coverage
+*.pem 

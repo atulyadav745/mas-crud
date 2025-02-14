@@ -7,6 +7,8 @@ interface JwtPayload {
 
 export interface AuthRequest extends Request {
   user: JwtPayload;
+  body: any;
+  params: any;
 }
 
 export const auth = (async (req: Request, res: Response, next: NextFunction) => {
